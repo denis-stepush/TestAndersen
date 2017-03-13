@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TestAndersen</string>
+    <string name="new_text">new</string>
+    <string name="top">top</string>
 </resources>
