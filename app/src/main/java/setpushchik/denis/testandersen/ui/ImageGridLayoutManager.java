@@ -1,4 +1,4 @@
-package setpushchik.denis.testandersen;
+package setpushchik.denis.testandersen.ui;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;

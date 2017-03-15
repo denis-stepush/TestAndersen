@@ -1,4 +1,4 @@
-package setpushchik.denis.testandersen.activities;
+package setpushchik.denis.testandersen.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

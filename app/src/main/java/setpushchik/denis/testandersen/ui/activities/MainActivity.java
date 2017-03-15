@@ -1,4 +1,4 @@
-package setpushchik.denis.testandersen.activities;
+package setpushchik.denis.testandersen.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
-import setpushchik.denis.testandersen.ImageGridLayoutManager;
+import setpushchik.denis.testandersen.ui.ImageGridLayoutManager;
 import setpushchik.denis.testandersen.R;
 import setpushchik.denis.testandersen.adapters.PlaceImageAdapter;
 import setpushchik.denis.testandersen.network.RedditApi;

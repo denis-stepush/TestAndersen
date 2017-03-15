@@ -12,7 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import setpushchik.denis.testandersen.ImageGridLayoutManager;
+import setpushchik.denis.testandersen.ui.ImageGridLayoutManager;
 import setpushchik.denis.testandersen.R;
 import setpushchik.denis.testandersen.network.model.Image;
 import setpushchik.denis.testandersen.utils.PicassoBigCache;
