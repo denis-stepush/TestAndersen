@@ -1,9 +1,22 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/build
 /captures
 .externalNativeBuild
+
+# Gradle
+.gradle/
+build/
+app/build/
+*manifest-merger-release-report.txt
+
+# IntelliJ
+.idea/*
+!.idea/codeStyleSettings.xml
+*.iml
+
+# Secure
+signing.properties
+
+# Misc
+*~
+*.swp
+/local.properties
+.DS_Store
