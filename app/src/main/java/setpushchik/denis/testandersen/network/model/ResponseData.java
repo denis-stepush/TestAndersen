@@ -13,6 +13,6 @@ import lombok.Getter;
 public class ResponseData {
 
     @Getter
-    @SerializedName("childData")
+    @SerializedName("children")
     private List<ChildData> childData;
 }

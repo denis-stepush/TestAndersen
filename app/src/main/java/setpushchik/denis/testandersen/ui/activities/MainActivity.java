@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.functions.Action1;
 import setpushchik.denis.testandersen.ui.ImageGridLayoutManager;
 import setpushchik.denis.testandersen.R;
 import setpushchik.denis.testandersen.adapters.PlaceImageAdapter;
@@ -62,7 +63,12 @@ public class MainActivity extends BaseRxActivity {
         }
 
         if (placeResponseObservable != null) {
-            createAndAddSubscription(bindOnNextAction(placeResponseObservable, this::onPlacesLoaded));
+            createAndAddSubscription(bindOnNextAction(placeResponseObservable, new Action1<PlacesResponse>() {
+                @Override
+                public void call(PlacesResponse placesResponse) {
+                    onPlacesLoaded(placesResponse);
+                }
+            }));
         }
     }
 

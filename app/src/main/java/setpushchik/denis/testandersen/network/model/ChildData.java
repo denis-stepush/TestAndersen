@@ -11,6 +11,6 @@ import lombok.Getter;
 public class ChildData {
 
     @Getter
-    @SerializedName("placeData")
+    @SerializedName("data")
     private PlaceData placeData;
 }

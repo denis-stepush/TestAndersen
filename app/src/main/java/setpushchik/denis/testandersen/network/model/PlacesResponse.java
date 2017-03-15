@@ -15,7 +15,7 @@ public class PlacesResponse {
 
     @Getter
     @SerializedName("data")
-    ResponseData responseData;
+    private ResponseData responseData;
 
     public List<Image> getImages() {
         List<Image> images = new ArrayList<>();
