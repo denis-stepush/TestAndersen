@@ -29,5 +29,4 @@ public class ViewUtil {
             changeVisibility(view, true);
         }
     }
-
 }
