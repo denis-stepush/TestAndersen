@@ -2,35 +2,77 @@ package setpushchik.denis.testandersen.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ProgressBar;
 
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
+import setpushchik.denis.testandersen.ImageGridLayoutManager;
 import setpushchik.denis.testandersen.R;
+import setpushchik.denis.testandersen.adapters.PlaceImageAdapter;
+import setpushchik.denis.testandersen.network.RedditApi;
+import setpushchik.denis.testandersen.network.model.Image;
+import setpushchik.denis.testandersen.network.model.PlacesResponse;
+import setpushchik.denis.testandersen.utils.ItemOffsetDecoration;
 import setpushchik.denis.testandersen.utils.ViewUtil;
 
 public class MainActivity extends BaseRxActivity {
 
     @BindView(R.id.recyclerView)
-    private RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.progressBar)
-    private ProgressBar mProgressBar;
+    ProgressBar mProgressBar;
+
+    private PlaceImageAdapter mPlaceImageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
+        initAdapterAndRecyclerView();
     }
 
-    @OnClick(R.id.newButton)
-    public void onNewButtonClick() {
+    private void initAdapterAndRecyclerView() {
+        mPlaceImageAdapter = new PlaceImageAdapter();
 
+        mRecyclerView.setLayoutManager(new ImageGridLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new ItemOffsetDecoration(1));
+        mRecyclerView.setAdapter(mPlaceImageAdapter);
     }
 
-    @OnClick(R.id.topButton)
-    public void onTopButtonClick() {
+    @OnClick({R.id.newButton, R.id.topButton})
+    public void onLoadImageButtonsClick(View button) {
+        clearList();
 
+        Observable<PlacesResponse> placeResponseObservable = null;
+        switch (button.getId()) {
+            case R.id.newButton:
+                placeResponseObservable = RedditApi.getRedditService().getNew();
+                break;
+            case R.id.topButton:
+                placeResponseObservable = RedditApi.getRedditService().getTop();
+                break;
+        }
+
+        if (placeResponseObservable != null) {
+            createAndAddSubscription(bindOnNextAction(placeResponseObservable, this::onPlacesLoaded));
+        }
+    }
+
+    private void clearList() {
+        mPlaceImageAdapter.clear();
+    }
+
+    private void onPlacesLoaded(PlacesResponse placeResponse) {
+        List<Image> images = placeResponse.getImages();
+        mPlaceImageAdapter.setImages(images);
     }
 
     @Override
@@ -39,13 +81,7 @@ public class MainActivity extends BaseRxActivity {
     }
 
     @Override
-    public void doOnError(Throwable throwable) {
-        ViewUtil.hideViews(mProgressBar);
-        throwable.printStackTrace();
-    }
-
-    @Override
-    public void doOnCompleted() {
+    public void doOnTerminate() {
         ViewUtil.hideViews(mProgressBar);
     }
 }

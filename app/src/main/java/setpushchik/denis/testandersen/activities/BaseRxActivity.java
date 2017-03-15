@@ -48,13 +48,17 @@ public abstract class BaseRxActivity extends AppCompatActivity {
     }
 
     protected void unsubscribeAll() {
-        if (mSubscriptions == null) { return; }
+        if (mSubscriptions == null) {
+            return;
+        }
         mSubscriptions.clear();
         mSubscriptions = new CompositeSubscription();
     }
 
     protected void unsubscribe(Subscription subscription) {
-        if (subscription == null || mSubscriptions == null) { return; }
+        if (subscription == null || mSubscriptions == null) {
+            return;
+        }
         mSubscriptions.remove(subscription);
     }
 
@@ -78,26 +82,22 @@ public abstract class BaseRxActivity extends AppCompatActivity {
     protected <T> Subscription createAndAddSubscription(Observable<T> observable, Observer<T> observer) {
         return addSubscription(bindObservable(observable, observer));
     }
+
     protected <T> Subscription createAndAddSubscription(Observable<T> observable) {
         return addSubscription(bindObservable(observable));
     }
+
     //use only for SmoothProgressBar
-    protected  <T> Subscription justBindObservable(Observable<T> observable, Observer<T> observer) {
+    protected <T> Subscription justBindObservable(Observable<T> observable, Observer<T> observer) {
         return observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-    private  <T> Subscription bindObservable(Observable<T> observable, Observer<T> observer) {
+
+    private <T> Subscription bindObservable(Observable<T> observable, Observer<T> observer) {
         return observable
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        doOnError(throwable);
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Action0() {
                     @Override
@@ -106,21 +106,21 @@ public abstract class BaseRxActivity extends AppCompatActivity {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted(new Action0() {
+                .doOnTerminate(new Action0() {
                     @Override
                     public void call() {
-                        doOnCompleted();
+                        doOnTerminate();
                     }
                 })
                 .subscribe(observer);
     }
 
-    public  <T> Observable<T> bindOnNextAction(Observable<T> observable,Action1<T> onNextAction) {
+    public <T> Observable<T> bindOnNextAction(Observable<T> observable, Action1<T> onNextAction) {
         return observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread()).doOnNext(onNextAction);
     }
 
-    public  <T> Subscription bindObservable(Observable<T> observable) {
+    public <T> Subscription bindObservable(Observable<T> observable) {
         Observer<T> observer = new Observer<T>() {
             @Override
             public void onCompleted() {
@@ -135,11 +135,11 @@ public abstract class BaseRxActivity extends AppCompatActivity {
 
             }
         };
-        return bindObservable(observable,observer);
+        return bindObservable(observable, observer);
     }
 
     public abstract void doOnSubscribe();
-    public abstract void doOnError(Throwable throwable);
-    public abstract void doOnCompleted();
+
+    public abstract void doOnTerminate();
 }
 
